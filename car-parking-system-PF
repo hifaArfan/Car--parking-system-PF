@@ -1,0 +1,144 @@
+#include <iostream>
+using namespace std;
+
+int totalCars = 0;
+int maxCars = 50;
+int chargesPerCar = 100;
+int totalRevenue = 0;
+int carNumbers[50]; 
+
+void parkCar() {
+    if (totalCars < maxCars) {
+        int carNo;
+        cout << "Enter Car Number to Park: ";
+        cin >> carNo;
+
+        carNumbers[totalCars] = carNo; 
+        totalCars++;
+        totalRevenue += chargesPerCar;
+        cout << "Car Parked Successfully!\n";
+    } else {
+        cout << "Parking is Full!\n";
+    }
+}
+
+void removeCar() {
+    if (totalCars == 0) {
+        cout << "No Cars in Parking!\n";
+        return;
+    }
+
+    int carNo;
+    cout << "Enter Car Number to Remove: ";
+    cin >> carNo;
+
+    bool found = false;
+    for (int i = 0; i < totalCars; i++) {
+        if (carNumbers[i] == carNo) {
+            for (int j = i; j < totalCars - 1; j++) {
+                carNumbers[j] = carNumbers[j + 1];
+            }
+            totalCars--;
+            totalRevenue -= chargesPerCar;
+            cout << "Car Removed Successfully!\n";
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Car Number not found!\n";
+    }
+}
+
+void showTotalCars() {
+    cout << "Total Parked Cars: " << totalCars << endl;
+}
+
+void showTotalCharges() {
+    cout << "Total Charges Collected: Rs " << totalRevenue << endl;
+}
+
+void adminMenu() {
+    string password;
+    cout << "Enter Admin Password: ";
+    cin >> password;
+
+    if (password != "TheCollectiveSix") {
+        cout << "Access Denied!\n";
+        return;
+    }
+
+    int choice;
+    do {
+        cout << "\n--- Admin Menu ---\n";
+        cout << "1. Park Car\n";
+        cout << "2. Remove Car\n";
+        cout << "3. Show Total Cars\n";
+        cout << "4. Show Total Charges\n";
+        cout << "5. Logout\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: parkCar(); break;
+            case 2: removeCar(); break;       
+            case 3: showTotalCars(); break;
+            case 4: showTotalCharges(); break;
+            case 5: cout << "Logging out...\n"; break;
+            default: cout << "Invalid Choice!\n";
+        }
+    } while (choice != 5);
+}
+
+void userMenu() {
+    int choice;
+    do {
+        cout << "\n--- User Menu ---\n";
+        cout << "1. Park Your Car\n";
+        cout << "2. Show Total Parked Cars\n";
+        cout << "3. Show Parking Charges\n";
+        cout << "4. Back to Main Menu\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                cout << "Parking Charges per Car: Rs " << chargesPerCar << endl;
+                char confirm;
+                cout << "Do you want to park your car? (y/n): ";
+                cin >> confirm;
+                if (confirm == 'y' || confirm == 'Y') {
+                    parkCar();
+                } else {
+                    cout << "Parking Cancelled.\n";
+                }
+                break;
+            }
+            case 2: showTotalCars(); break;
+            case 3: cout << "Parking Charges per Car: Rs " << chargesPerCar << endl; break;
+            case 4: cout << "Returning to Main Menu...\n"; break;
+            default: cout << "Invalid Choice!\n";
+        }
+    } while (choice != 4);
+}
+
+int main() {
+    int choice;
+    do {
+        cout << "\n----- Car Parking Management System -----\n";
+        cout << "1. Admin Mode\n";
+        cout << "2. User Mode\n";
+        cout << "3. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: adminMenu(); break;
+            case 2: userMenu(); break;
+            case 3: cout << "Thank You!\n"; break;
+            default: cout << "Invalid Choice!\n";
+        }
+    } while (choice != 3);
+
+    return 0;
+}
